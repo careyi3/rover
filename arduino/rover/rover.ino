@@ -41,21 +41,21 @@ void stopCallback(char command, int value)
   analogWrite(13, 0);
 }
 
-driveLeft(int speed, bool direction)
+void driveLeft(int speed, bool direction)
 {
   if (direction)
   {
-    analogWrite(9, speed);
-    analogWrite(10, 0);
+    analogWrite(10, speed);
+    analogWrite(9, 0);
   }
   else
   {
-    analogWrite(9, 0);
-    analogWrite(10, speed);
+    analogWrite(10, 0);
+    analogWrite(9, speed);
   }
 }
 
-driveRight(int speed, bool direction)
+void driveRight(int speed, bool direction)
 {
   if (direction)
   {
@@ -144,7 +144,7 @@ bool isValidValue(int value)
 int commandIndex(char command)
 {
   int idx = -1;
-  for (int i = 0; i < 4; i++)
+  for (int i = 0; i < 5; i++)
   {
     if (command == commands[i])
     {
