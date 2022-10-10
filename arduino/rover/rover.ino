@@ -79,7 +79,7 @@ void (*callbacks[5])(char command, int value) = {
 
 void setup()
 {
-  Serial.begin(9600);
+  Serial.begin(115200);
 }
 
 void loop()
@@ -95,7 +95,7 @@ void loop()
     handleMessage();
   }
   writeSensorData();
-  delay(250);
+  //delay(250);
 }
 
 void writeSensorData()
