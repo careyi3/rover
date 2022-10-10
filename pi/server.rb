@@ -14,6 +14,7 @@ reader = Thread.new {
   while line == nil
     line = ser.readline
     sem.synchronize {
+      puts "<- " + line
       if line[0] == 'D'
         data = line
       end
@@ -26,13 +27,14 @@ def handleData(sem, data)
   dist = 0
   sem.synchronize {
     if data != nil
-      dist = data[1..-1].to_i
+      dist = data[1..-1].to_f
     end
   }
   dist
 end
 
 def runCommands(ser, command)
+  puts "-> " + command
   ser.write("#{command}\n")
 end
 
@@ -40,10 +42,10 @@ forward = false
 turning = false
 while true
   dist = handleData(sem, data)
-  puts dist
-  if dist < 40
+  if dist <= 40
     unless turning
-      runCommands(ser, 'L100')
+      turn_command = [true, false].sample ? 'L100' : 'R100'
+      runCommands(ser, turn_command)
       forward = false
       turning = true
     end
@@ -54,4 +56,5 @@ while true
       turning = false
     end
   end
+  sleep(0.05)
 end

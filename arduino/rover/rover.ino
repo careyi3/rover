@@ -84,7 +84,6 @@ void setup()
 
 void loop()
 {
-  Serial.flush();
   if (Serial.available() > 0)
   {
     Serial.readBytesUntil("\n", message, 4);
@@ -95,7 +94,7 @@ void loop()
     handleMessage();
   }
   writeSensorData();
-  //delay(250);
+  delay(50);
 }
 
 void writeSensorData()
