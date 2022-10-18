@@ -87,7 +87,7 @@ void setup()
   {
     filter.addSample(hc.dist());
   }
-  Serial.begin(115200);
+  Serial.begin(921600);
 }
 
 void loop()
@@ -102,7 +102,7 @@ void loop()
     handleMessage();
   }
   writeSensorData();
-  delay(50);
+  //delay(50);
 }
 
 void writeSensorData()

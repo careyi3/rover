@@ -4,8 +4,8 @@ require 'readline'
 
 sem = Mutex.new
 
-ser = SerialPort.new("/dev/ttyACM0", 115200, 8, 1, SerialPort::NONE)
-# ser = SerialPort.new("/dev/tty.usbmodem1101", 115200, 8, 1, SerialPort::NONE)
+ser = SerialPort.new("/dev/ttyACM0", 921600, 8, 1, SerialPort::NONE)
+#ser = SerialPort.new("/dev/tty.usbmodem101", 921600, 8, 1, SerialPort::NONE)
 
 data = nil
 
@@ -49,7 +49,7 @@ while true
   dist = handleData(sem, data)
   if dist <= 45
     unless turning
-      turn_command = 'L100'#[true, false].sample ? 'L100' : 'R100'
+      turn_command = [true, false].sample ? 'L100' : 'R100'
       runCommands(ser, turn_command)
       forward = false
       turning = true
@@ -58,13 +58,13 @@ while true
   else
     #unless forward
       dist_offset = dist >= 40 ? dist - 40 : 0
-      throttle = 40 + dist_offset
+      throttle = 60 + dist_offset
       runCommands(ser, "F#{throttle}")
       forward = true
       turning = false
     #end
   end
-  sleep(0.05)
+  sleep(0.01)
   t2 = Time.now
   dt = t2 - t1
 end
