@@ -40,21 +40,31 @@ end
 
 forward = false
 turning = false
+dist_old = 0
+dt = 0
+dist = 0
 while true
+  t1 = Time.now
+  dist_old = dist
   dist = handleData(sem, data)
-  if dist <= 40
+  if dist <= 45
     unless turning
-      turn_command = [true, false].sample ? 'L100' : 'R100'
+      turn_command = 'L100'#[true, false].sample ? 'L100' : 'R100'
       runCommands(ser, turn_command)
       forward = false
       turning = true
+      sleep(0.5)
     end
   else
-    unless forward
-      runCommands(ser, 'F150')
+    #unless forward
+      dist_offset = dist >= 40 ? dist - 40 : 0
+      throttle = 40 + dist_offset
+      runCommands(ser, "F#{throttle}")
       forward = true
       turning = false
-    end
+    #end
   end
   sleep(0.05)
+  t2 = Time.now
+  dt = t2 - t1
 end

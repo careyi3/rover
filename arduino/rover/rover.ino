@@ -1,4 +1,7 @@
 #include <HCSR04.h>
+#include <MovingAverage.h>
+
+const int FILTER_LENGTH = 10;
 
 char commands[5] = "FBLRS";
 char message[4];
@@ -6,6 +9,7 @@ char command;
 int value;
 
 HCSR04 hc(8, 12);
+MovingAverage filter(FILTER_LENGTH);
 
 void noOp() {}
 
@@ -79,6 +83,10 @@ void (*callbacks[5])(char command, int value) = {
 
 void setup()
 {
+  for(int i = 0; i < FILTER_LENGTH; i++)
+  {
+    filter.addSample(hc.dist());
+  }
   Serial.begin(115200);
 }
 
@@ -100,7 +108,7 @@ void loop()
 void writeSensorData()
 {
   Serial.print("D");
-  Serial.println(hc.dist());
+  Serial.println(filter.addSample(hc.dist()));
   Serial.flush();
 }
 
