@@ -7,7 +7,8 @@ sem = Mutex.new
 ser = SerialPort.new("/dev/ttyACM0", 921600, 8, 1, SerialPort::NONE)
 #ser = SerialPort.new("/dev/tty.usbmodem101", 921600, 8, 1, SerialPort::NONE)
 
-data = nil
+yawRaw = nil
+distanceRaw = nil
 
 reader = Thread.new {
   line = nil
@@ -16,7 +17,10 @@ reader = Thread.new {
     sem.synchronize {
       puts "<- " + line
       if line[0] == 'D'
-        data = line
+        distanceRaw = line
+      end
+      if line[0] == 'Y'
+        yawRaw = line
       end
     }
     line = nil
@@ -24,30 +28,29 @@ reader = Thread.new {
 }
 
 def handleData(sem, data)
-  dist = 0
+  val = 0
   sem.synchronize {
     if data != nil
-      dist = data[1..-1].to_f
+      val = data[1..-1].to_f
     end
   }
-  dist
+  val
 end
 
 def runCommands(ser, command)
-  puts "-> " + command
+  puts "-> #{command}"
   ser.write("#{command}\n")
 end
 
 forward = false
 turning = false
-dist_old = 0
-dt = 0
-dist = 0
+yaw = 0.0
+distance = 0.0
 while true
-  t1 = Time.now
-  dist_old = dist
-  dist = handleData(sem, data)
-  if dist <= 45
+  yaw = handleData(sem, yawRaw)
+  distance = handleData(sem, distanceRaw)
+  puts "<- yaw: #{yaw}, distance: #{distance}"
+  if distance <= 45
     unless turning
       turn_command = [true, false].sample ? 'L100' : 'R100'
       runCommands(ser, turn_command)
@@ -56,15 +59,11 @@ while true
       sleep(0.5)
     end
   else
-    #unless forward
-      dist_offset = dist >= 40 ? dist - 40 : 0
-      throttle = 60 + dist_offset
-      runCommands(ser, "F#{throttle}")
-      forward = true
-      turning = false
-    #end
+    dist_offset = dist >= 40 ? dist - 40 : 0
+    throttle = 60 + dist_offset
+    runCommands(ser, "F#{throttle}")
+    forward = true
+    turning = false
   end
   sleep(0.01)
-  t2 = Time.now
-  dt = t2 - t1
 end
