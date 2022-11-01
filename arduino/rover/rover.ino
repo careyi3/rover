@@ -1,5 +1,8 @@
 #include <HCSR04.h>
 #include <MovingAverage.h>
+#include <Adafruit_MPU6050.h>
+#include <Adafruit_Sensor.h>
+#include <Wire.h>
 
 const int FILTER_LENGTH = 10;
 
@@ -8,8 +11,13 @@ char message[4];
 char command;
 int value;
 
+long timer, timerOld = 0;
+double dt = 0.0;
+double yaw = 0.0;
+
 HCSR04 hc(8, 12);
 MovingAverage filter(FILTER_LENGTH);
+Adafruit_MPU6050 mpu;
 
 void noOp() {}
 
@@ -83,15 +91,23 @@ void (*callbacks[5])(char command, int value) = {
 
 void setup()
 {
-  for(int i = 0; i < FILTER_LENGTH; i++)
+  for (int i = 0; i < FILTER_LENGTH; i++)
   {
     filter.addSample(hc.dist());
   }
   Serial.begin(921600);
+  mpu.begin();
+  mpu.setAccelerometerRange(MPU6050_RANGE_8_G);
+  mpu.setGyroRange(MPU6050_RANGE_500_DEG);
+  mpu.setFilterBandwidth(MPU6050_BAND_260_HZ);
 }
 
 void loop()
 {
+  timerOld = timer;
+  timer = micros();
+  dt = (timer - timerOld) / 1000000.0;
+
   if (Serial.available() > 0)
   {
     Serial.readBytesUntil("\n", message, 4);
@@ -102,11 +118,21 @@ void loop()
     handleMessage();
   }
   writeSensorData();
-  //delay(50);
+  // delay(50);
 }
 
 void writeSensorData()
 {
+  sensors_event_t a, g, temp;
+  mpu.getEvent(&a, &g, &temp);
+  if (g.gyro.z > 0.02 || g.gyro.z < -0.02)
+  {
+    yaw = yaw + g.gyro.z * dt;
+  }
+  Serial.print("Y");
+  Serial.println(yaw * 180 / PI);
+  Serial.flush();
+
   Serial.print("D");
   Serial.println(filter.addSample(hc.dist()));
   Serial.flush();

@@ -3,8 +3,6 @@
 #include <Wire.h>
 
 Adafruit_MPU6050 mpu;
-#include <SimpleKalmanFilter.h>
-
 
 long timer, timerOld = 0;
 double dt = 0.0;
