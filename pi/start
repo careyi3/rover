@@ -1,5 +1,5 @@
 #! /bin/bash
 
 cd app
-bundle install
+bundle check || bundle install
 ruby app.rb $1 2>> log 1>> log
