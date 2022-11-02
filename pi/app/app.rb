@@ -4,4 +4,8 @@ require('bundler')
 Bundler.require
 require_all('lib')
 
-Rover.new.run
+if ARGV[0].nil?
+  Rover.new(logging: true).run
+else
+  Rover.new(port_name: ARGV[0], logging: true).run
+end

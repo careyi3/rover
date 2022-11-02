@@ -2,4 +2,4 @@
 
 cd app
 bundle install
-ruby app.rb 2>> log 1>> log
+ruby app.rb $1 2>> log 1>> log

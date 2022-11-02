@@ -3,10 +3,10 @@
 class Rover
   attr_reader(:server, :yaw, :distance)
 
-  def initialize
+  def initialize(port_name: '/dev/ttyACM0', logging: true)
     @yaw = 0.0
     @distance = 0.0
-    @server = Serial::Server.new(port_name: '/dev/ttyACM0', logging: true)
+    @server = Serial::Server.new(port_name: port_name, logging: logging)
     @server.start
   end
 
@@ -60,11 +60,47 @@ class Rover
   end
 
   def orient
-    if [true, false].sample
-      left(100)
-    else
-      right(100)
-    end
+    left_angle = @yaw - 45
+    right_angle = @yaw + 45
+
+    coord = {}
+
+    stop
     sleep(0.5)
+    left(50)
+    while @yaw > left_angle
+      fetch_sensor_data
+      coord[@distance] = @yaw
+      sleep(0.01)
+    end
+
+    stop
+    sleep(0.5)
+    right(50)
+    while @yaw < right_angle
+      fetch_sensor_data
+      coord[@distance] = @yaw
+      sleep(0.01)
+    end
+
+    stop
+    sleep(0.5)
+    target = coords[coord.keys.min]
+
+    if target > @yaw
+      right(50)
+      while @yaw < target
+        fetch_sensor_data
+        sleep(0.01)
+      end
+    else
+      left(50)
+      while @yaw > target
+        fetch_sensor_data
+        sleep(0.01)
+      end
+    end
+
+    stop
   end
 end
