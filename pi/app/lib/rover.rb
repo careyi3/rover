@@ -66,7 +66,7 @@ class Rover
     coord = {}
 
     sleep(0.5)
-    left(50)
+    left(75)
     while @yaw > left_angle
       fetch_sensor_data
       coord[@distance] = @yaw
@@ -74,7 +74,7 @@ class Rover
     end
 
     sleep(0.5)
-    right(50)
+    right(75)
     while @yaw < right_angle
       fetch_sensor_data
       coord[@distance] = @yaw
@@ -85,13 +85,13 @@ class Rover
     target = coord[coord.keys.max]
 
     if target > @yaw
-      right(50)
+      right(75)
       while @yaw < target
         fetch_sensor_data
         sleep(0.01)
       end
     else
-      left(50)
+      left(75)
       while @yaw > target
         fetch_sensor_data
         sleep(0.01)
