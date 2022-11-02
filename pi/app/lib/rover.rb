@@ -6,7 +6,7 @@ class Rover
   def initialize
     @yaw = 0.0
     @distance = 0.0
-    @server = Serial::Server.new(logging: true)
+    @server = Serial::Server.new(port_name: '/dev/ttyACM0', logging: true)
     @server.start
   end
 
@@ -18,6 +18,7 @@ class Rover
       else
         orient
       end
+      sleep(0.01)
     end
   end
 
@@ -35,23 +36,23 @@ class Rover
   end
 
   def forward(speed)
-    drive_command('F', speed)
+    drive_command(command: 'F', value: speed)
   end
 
   def reverse(speed)
-    drive_command('B', speed)
+    drive_command(command: 'B', value: speed)
   end
 
   def left(speed)
-    drive_command('L', speed)
+    drive_command(command: 'L', value: speed)
   end
 
   def right(speed)
-    drive_command('R', speed)
+    drive_command(command: 'R', value: speed)
   end
 
   def stop
-    drive_command('S')
+    drive_command(command: 'S')
   end
 
   def drive_command(command:, value: nil)

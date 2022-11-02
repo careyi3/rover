@@ -14,8 +14,8 @@ module Serial
       @logging = logging
       @running = false
       @data = {
-        distance: nil,
-        yaw: nil
+        distance: 0.0,
+        yaw: 0.0
       }
       @sem = Mutex.new
     end
@@ -42,9 +42,9 @@ module Serial
     def fetch(data_type)
       unless running
         puts 'Server not running' if @logging
-        return nil
+        return 0.0
       end
-      data = nil
+      data = 0.0
       @sem.synchronize do
         data = @data[data_type]
       end
@@ -63,8 +63,8 @@ module Serial
 
     def read_loop
       loop do
-        line = ser.readline
-        handleData(line) if data?(line[0])
+        line = @port.readline
+        handle_data(line) if data?(line[0])
         log(line) if @logging
       end
     end
@@ -75,7 +75,7 @@ module Serial
 
     def handle_data(line)
       @sem.synchronize do
-        @data[DATA_TYPES[id]] = line[1..].to_f
+        @data[DATA_TYPES[line[0]]] = line[1..].to_f
       end
     end
 
