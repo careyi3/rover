@@ -1,0 +1,10 @@
+# frozen_string_literal: true
+
+source('https://rubygems.org') do
+  gem('bundler')
+  gem('pry')
+  gem('readline')
+  gem('require_all')
+  gem('rubocop')
+  gem('serialport')
+end

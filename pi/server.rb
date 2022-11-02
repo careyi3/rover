@@ -49,7 +49,6 @@ distance = 0.0
 while true
   yaw = handleData(sem, yawRaw)
   distance = handleData(sem, distanceRaw)
-  puts "<- yaw: #{yaw}, distance: #{distance}"
   if distance <= 45
     unless turning
       turn_command = [true, false].sample ? 'L100' : 'R100'
@@ -59,7 +58,7 @@ while true
       sleep(0.5)
     end
   else
-    dist_offset = dist >= 40 ? dist - 40 : 0
+    dist_offset = distance >= 40 ? distance - 40 : 0
     throttle = 60 + dist_offset
     runCommands(ser, "F#{throttle}")
     forward = true

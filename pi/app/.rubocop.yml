@@ -1,0 +1,10 @@
+# frozen_string_literal: true
+
+Style/InlineComment:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/NumericLiterals:
+  Enabled: false
