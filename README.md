@@ -4,4 +4,4 @@ This is the firmware for BeeBoop the rover. There are two main sections, `arduin
 
 ## Learn More
 
-You can find out more about this project by checking ou this playlist on [YouTube]("https://www.youtube.com/playlist?list=PLMqshdJjWZdlUxV5mpv8ZS8AxORyc0mM7") and is page on my [website]("https://iancarey.ie/downloads/beeboop").
+You can find out more about this project by checking ou this playlist on [YouTube](https://www.youtube.com/playlist?list=PLMqshdJjWZdlUxV5mpv8ZS8AxORyc0mM7) and is page on my [website](https://iancarey.ie/downloads/beeboop).
