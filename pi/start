@@ -2,4 +2,4 @@
 
 cd app
 bundle install
-ruby app.rb 2>> /log/stderr 1>> /log/stdout
+ruby app.rb 2>> log 1>> log

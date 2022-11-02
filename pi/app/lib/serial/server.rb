@@ -75,7 +75,7 @@ module Serial
 
     def handle_data(line)
       @sem.synchronize do
-        @data[DATA_TYPES[line[0]]] = line[1..].to_f
+        @data[DATA_TYPES[line[0]]] = line[1..-1].to_f
       end
     end
 

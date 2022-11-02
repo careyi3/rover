@@ -8,3 +8,6 @@ Style/Documentation:
 
 Style/NumericLiterals:
   Enabled: false
+
+Style/SlicingWithRange:
+  Enabled: false
