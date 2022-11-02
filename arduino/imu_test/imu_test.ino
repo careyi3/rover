@@ -24,7 +24,13 @@ void loop() {
   sensors_event_t a, g, temp;
   mpu.getEvent(&a, &g, &temp);
   if (g.gyro.z > 0.02 || g.gyro.z < -0.02) {
-    yaw = yaw + g.gyro.z * dt;
+    yaw = yaw + ((g.gyro.z * dt) * (180/PI));
+    if (yaw >= 360) {
+      yaw = yaw - 360;
+    }
+    if (yaw < 0) {
+      yaw = yaw + 360;
+    }
   }
-  Serial.println(yaw * 180/PI);
+  Serial.println(yaw);
 }

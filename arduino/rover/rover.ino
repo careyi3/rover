@@ -98,8 +98,8 @@ void setup()
   Serial.begin(921600);
   mpu.begin();
   mpu.setAccelerometerRange(MPU6050_RANGE_8_G);
-  mpu.setGyroRange(MPU6050_RANGE_500_DEG);
-  mpu.setFilterBandwidth(MPU6050_BAND_260_HZ);
+  mpu.setGyroRange(MPU6050_RANGE_2000_DEG);
+  mpu.setFilterBandwidth(MPU6050_BAND_184_HZ);
 }
 
 void loop()
@@ -127,10 +127,16 @@ void writeSensorData()
   mpu.getEvent(&a, &g, &temp);
   if (g.gyro.z > 0.02 || g.gyro.z < -0.02)
   {
-    yaw = yaw + g.gyro.z * dt;
+    yaw = yaw + ((g.gyro.z * dt) * (180/PI))*4;
+    if (yaw >= 360) {
+      yaw = yaw - 360;
+    }
+    if (yaw < 0) {
+      yaw = yaw + 360;
+    }
   }
   Serial.print("Y");
-  Serial.println(yaw * 180 / PI);
+  Serial.println(yaw);
   Serial.flush();
 
   Serial.print("D");
