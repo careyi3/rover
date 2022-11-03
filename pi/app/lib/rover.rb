@@ -67,7 +67,7 @@ class Rover
 
     sleep(0.5)
     left(50)
-    while abs(@yaw - target) > 5
+    while (@yaw - target).abs > 5
       fetch_sensor_data
       coord[@distance] = @yaw
       sleep(0.01)
@@ -77,7 +77,7 @@ class Rover
 
     sleep(0.5)
     right(50)
-    while abs(@yaw - target) > 5
+    while (@yaw - target).abs > 5
       fetch_sensor_data
       sleep(0.01)
     end
