@@ -60,42 +60,29 @@ class Rover
   end
 
   def orient
-    left_angle = @yaw - 45
-    right_angle = @yaw + 45
-
     coord = {}
+
+    target = @yaw + 350
+    target -= 360 if target > 360
 
     sleep(0.5)
     left(75)
-    while @yaw > left_angle
+    while abs(@yaw - target) > 2
       fetch_sensor_data
       coord[@distance] = @yaw
       sleep(0.01)
     end
+
+    target = coord[coord.keys.max]
 
     sleep(0.5)
     right(75)
-    while @yaw < right_angle
+    while abs(@yaw - target) > 2
       fetch_sensor_data
-      coord[@distance] = @yaw
       sleep(0.01)
     end
 
+    stop
     sleep(0.5)
-    target = coord[coord.keys.max]
-
-    if target > @yaw
-      right(75)
-      while @yaw < target
-        fetch_sensor_data
-        sleep(0.01)
-      end
-    else
-      left(75)
-      while @yaw > target
-        fetch_sensor_data
-        sleep(0.01)
-      end
-    end
   end
 end
