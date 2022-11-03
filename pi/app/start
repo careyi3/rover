@@ -1,5 +1,4 @@
 #! /bin/bash
 
-cd app
 bundle check || bundle install --deployment
 ruby app.rb $1 2>> log 1>> log

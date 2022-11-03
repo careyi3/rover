@@ -4,8 +4,8 @@ Description=Run rover firmware on boot
 [Service]
 Type=simple
 User=pi
-WorkingDirectory=/home/pi/workspace/rover/pi
-ExecStart=/home/pi/workspace/rover/pi/start
+WorkingDirectory=/home/pi/workspace/rover/pi/app
+ExecStart=/home/pi/workspace/rover/pi/app/start
 Restart=always
 
 [Install]
