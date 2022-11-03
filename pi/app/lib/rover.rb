@@ -66,8 +66,8 @@ class Rover
     target -= 360 if target > 360
 
     sleep(0.5)
-    left(75)
-    while abs(@yaw - target) > 2
+    left(50)
+    while abs(@yaw - target) > 5
       fetch_sensor_data
       coord[@distance] = @yaw
       sleep(0.01)
@@ -76,8 +76,8 @@ class Rover
     target = coord[coord.keys.max]
 
     sleep(0.5)
-    right(75)
-    while abs(@yaw - target) > 2
+    right(50)
+    while abs(@yaw - target) > 5
       fetch_sensor_data
       sleep(0.01)
     end
