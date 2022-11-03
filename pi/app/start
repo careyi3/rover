@@ -1,4 +1,5 @@
 #! /bin/bash
 
+source ~/.bash_profile # hack to make rbenv sourced in bash profile from GH repo installed on pi
 bundle check || bundle install --deployment
 ruby app.rb $1 2>> log 1>> log
