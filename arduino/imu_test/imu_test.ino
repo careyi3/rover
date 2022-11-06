@@ -7,6 +7,8 @@ Adafruit_MPU6050 mpu;
 long timer, timerOld = 0;
 double dt = 0.0;
 double yaw = 0.0;
+double heading = 15.0;
+double error = 0.0;
 
 void setup(void) {
   Serial.begin(115200);
@@ -32,5 +34,15 @@ void loop() {
       yaw = yaw + 360;
     }
   }
-  Serial.println(yaw);
+  double yaw_x = cos(yaw*(PI/180));
+  double yaw_y = sin(yaw*(PI/180));
+  double heading_x = cos(heading*(PI/180));
+  double heading_y = sin(heading*(PI/180));
+  error = atan((yaw_y/yaw_x - heading_y/heading_x)/(1 + (yaw_y/yaw_x)*(heading_y/heading_x))) * (180/PI);
+
+  Serial.print(heading);
+  Serial.print(",");
+  Serial.print(yaw);
+  Serial.print(",");
+  Serial.println(error);
 }

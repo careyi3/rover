@@ -36,6 +36,7 @@ class Rover
   end
 
   def forward(speed)
+    drive_command(command: 'H', value: @yaw)
     drive_command(command: 'F', value: speed)
   end
 
