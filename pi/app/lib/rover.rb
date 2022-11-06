@@ -65,18 +65,18 @@ class Rover
 
     target = @yaw + 358
     target -= 360 if target > 360
-    rotate_to_target(true, 65, target)
+    rotate_to_target(true, 65, target, coord)
     sleep(0.5)
 
     target = coord[coord.keys.max]
-    rotate_to_target(false, 65, target)
+    rotate_to_target(false, 65, target, nil)
     sleep(0.5)
 
     stop
     sleep(0.5)
   end
 
-  def rotate_to_target(dir, speed, target)
+  def rotate_to_target(dir, speed, target, coord)
     if dir
       right(speed)
     else
@@ -84,6 +84,7 @@ class Rover
     end
     while (@yaw - target).abs > 2
       fetch_sensor_data
+      coord[@distance] = @yaw unless coord.nil?
       sleep(0.01)
     end
   end
