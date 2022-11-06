@@ -77,6 +77,7 @@ class Rover
   end
 
   def rotate_to_target(dir, speed, target, coord)
+    target = 0 if target.nil?
     if dir
       right(speed)
     else

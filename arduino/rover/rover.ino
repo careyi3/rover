@@ -134,7 +134,7 @@ void setup()
   mpu.setGyroRange(MPU6050_RANGE_2000_DEG);
   mpu.setFilterBandwidth(MPU6050_BAND_184_HZ);
 
-  kp = 2.5;
+  kp = 0.1;
   ki = 0.0;
   kd = 0.0;
   setPoint = heading;
