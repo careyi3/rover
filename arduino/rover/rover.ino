@@ -109,8 +109,8 @@ void driveForward()
   }
   input = error;
   pid.Compute();
-  driveLeft(throttle - output, true);
-  driveRight(throttle + output, true);
+  driveLeft(throttle + output, true);
+  driveRight(throttle - output, true);
 }
 
 void (*callbacks[NUM_COMMANDS])(char command, int value) = {
@@ -134,7 +134,7 @@ void setup()
   mpu.setGyroRange(MPU6050_RANGE_2000_DEG);
   mpu.setFilterBandwidth(MPU6050_BAND_184_HZ);
 
-  kp = 0.2;
+  kp = 0.0;
   ki = 0.0;
   kd = 0.0;
   setPoint = heading;
