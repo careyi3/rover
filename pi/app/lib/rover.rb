@@ -37,7 +37,7 @@ class Rover
 
   def forward(speed)
     drive_command(command: 'H', value: @yaw.to_i)
-    drive_command(command: 'F', value: speed)
+    drive_command(command: 'F', value: speed.to_i)
   end
 
   def reverse(speed)
@@ -61,32 +61,33 @@ class Rover
   end
 
   def orient
-    coord = {}
-
+    rotation_speed = 50
     target = @yaw + 358
     target -= 360 if target > 360
-    rotate_to_target(true, 65, target, coord)
-    sleep(0.5)
+    target = find_new_target(rotation_speed, target)
+    rotate_to_target(rotation_speed, target)
+  end
 
-    target = coord[coord.keys.max]
-    rotate_to_target(false, 65, target, nil)
-    sleep(0.5)
-
+  def rotate_to_target(speed, target)
+    left(speed)
+    while (@yaw - target).abs > 2
+      fetch_sensor_data
+      sleep(0.01)
+    end
     stop
     sleep(0.5)
   end
 
-  def rotate_to_target(dir, speed, target, coord)
-    target = 0 if target.nil?
-    if dir
-      right(speed)
-    else
-      left(speed)
-    end
+  def find_new_target(speed, target)
+    coord = {}
+    right(speed)
     while (@yaw - target).abs > 2
       fetch_sensor_data
-      coord[@distance] = @yaw unless coord.nil?
+      coord[@distance] = @yaw
       sleep(0.01)
     end
+    stop
+    sleep(0.5)
+    coord[coord.keys.max] || 0
   end
 end
