@@ -74,8 +74,6 @@ class Rover
       fetch_sensor_data
       sleep(0.01)
     end
-    stop
-    sleep(0.5)
   end
 
   def find_new_target(speed, target)
@@ -86,8 +84,6 @@ class Rover
       coord[@distance] = @yaw
       sleep(0.01)
     end
-    stop
-    sleep(0.5)
     coord[coord.keys.max] || 0
   end
 end
