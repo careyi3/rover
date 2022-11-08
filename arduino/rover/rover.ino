@@ -136,7 +136,7 @@ void setup()
   mpu.setFilterBandwidth(MPU6050_BAND_184_HZ);
 
   kp = 0.01;
-  ki = 0.0;
+  ki = 0.01;
   kd = 0.0;
   setPoint = heading;
   pid = PID(&input, &output, &setPoint, kp, ki, kd, DIRECT);

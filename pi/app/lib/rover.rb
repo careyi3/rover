@@ -61,8 +61,8 @@ class Rover
   end
 
   def orient
-    rotation_speed = 55
-    target = @yaw + 358
+    rotation_speed = 50
+    target = @yaw + 270
     target -= 360 if target > 360
     target = find_new_target(rotation_speed, target)
     rotate_to_target(rotation_speed, target)
@@ -70,7 +70,7 @@ class Rover
 
   def rotate_to_target(speed, target)
     left(speed)
-    while (@yaw - target).abs > 2
+    while (@yaw - target).abs > 5
       fetch_sensor_data
       sleep(0.01)
     end
@@ -79,7 +79,7 @@ class Rover
   def find_new_target(speed, target)
     coord = {}
     right(speed)
-    while (@yaw - target).abs > 2
+    while (@yaw - target).abs > 5
       fetch_sensor_data
       coord[@distance] = @yaw
       sleep(0.01)
