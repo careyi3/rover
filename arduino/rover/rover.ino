@@ -72,6 +72,7 @@ void headingCallback(char command, int value)
   heading = value;
   yaw = value;
   setPoint = heading;
+  pid = PID(&input, &output, &setPoint, kp, ki, kd, DIRECT);
 }
 
 void driveLeft(int speed, bool direction)
@@ -135,8 +136,8 @@ void setup()
   mpu.setGyroRange(MPU6050_RANGE_2000_DEG);
   mpu.setFilterBandwidth(MPU6050_BAND_184_HZ);
 
-  kp = 0.01;
-  ki = 0.01;
+  kp = 0.1;
+  ki = 0.1;
   kd = 0.0;
   setPoint = heading;
   pid = PID(&input, &output, &setPoint, kp, ki, kd, DIRECT);
@@ -170,15 +171,12 @@ void writeSensorData()
 {
   sensors_event_t a, g, temp;
   mpu.getEvent(&a, &g, &temp);
-  if (g.gyro.z > 0.02 || g.gyro.z < -0.02)
-  {
-    yaw = yaw + ((g.gyro.z * dt) * (180 / PI));
-    if (yaw >= 360)
-    {
+  if (g.gyro.z > 0.01 || g.gyro.z < -0.03) {
+    yaw = yaw + (((g.gyro.z + 0.015) * dt) * (180/PI));
+    if (yaw >= 360) {
       yaw = yaw - 360;
     }
-    if (yaw < 0)
-    {
+    if (yaw < 0) {
       yaw = yaw + 360;
     }
   }
@@ -195,11 +193,6 @@ void writeSensorData()
   Serial.print("D");
   Serial.println(filter.addSample(hc.dist()));
   Serial.flush();
-  /*Serial.print(heading);
-  Serial.print(",");
-  Serial.print(yaw);
-  Serial.print(",");
-  Serial.println(error);*/
 }
 
 void handleMessage()
