@@ -70,6 +70,7 @@ void stopCallback(char command, int value)
 void headingCallback(char command, int value)
 {
   heading = value;
+  yaw = value;
   setPoint = heading;
 }
 
@@ -134,7 +135,7 @@ void setup()
   mpu.setGyroRange(MPU6050_RANGE_2000_DEG);
   mpu.setFilterBandwidth(MPU6050_BAND_184_HZ);
 
-  kp = 0.0;
+  kp = 0.1;
   ki = 0.0;
   kd = 0.0;
   setPoint = heading;
@@ -163,7 +164,6 @@ void loop()
   {
     driveForward();
   }
-  // delay(50);
 }
 
 void writeSensorData()
@@ -172,7 +172,7 @@ void writeSensorData()
   mpu.getEvent(&a, &g, &temp);
   if (g.gyro.z > 0.02 || g.gyro.z < -0.02)
   {
-    yaw = yaw + ((g.gyro.z * dt) * (180 / PI)) * 4;
+    yaw = yaw + ((g.gyro.z * dt) * (180 / PI));
     if (yaw >= 360)
     {
       yaw = yaw - 360;
@@ -195,6 +195,11 @@ void writeSensorData()
   Serial.print("D");
   Serial.println(filter.addSample(hc.dist()));
   Serial.flush();
+  /*Serial.print(heading);
+  Serial.print(",");
+  Serial.print(yaw);
+  Serial.print(",");
+  Serial.println(error);*/
 }
 
 void handleMessage()
