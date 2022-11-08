@@ -61,7 +61,7 @@ class Rover
   end
 
   def orient
-    rotation_speed = 50
+    rotation_speed = 45
     target = @yaw + 180
     target -= 360 if target > 360
     target = find_new_target(rotation_speed, target)
