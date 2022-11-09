@@ -136,8 +136,8 @@ void setup()
   mpu.setGyroRange(MPU6050_RANGE_2000_DEG);
   mpu.setFilterBandwidth(MPU6050_BAND_184_HZ);
 
-  kp = 1;
-  ki = 0.1;
+  kp = 1.5;
+  ki = 0.5;
   kd = 0.0;
   setPoint = heading;
   pid = PID(&input, &output, &setPoint, kp, ki, kd, DIRECT);
@@ -171,7 +171,7 @@ void writeSensorData()
 {
   sensors_event_t a, g, temp;
   mpu.getEvent(&a, &g, &temp);
-  if (g.gyro.z > 0.01 || g.gyro.z < -0.03) {
+  if (g.gyro.z > 0.01 || g.gyro.z <= -0.03) {
     yaw = yaw + (((g.gyro.z + 0.015) * dt) * (180/PI));
     if (yaw >= 360) {
       yaw = yaw - 360;

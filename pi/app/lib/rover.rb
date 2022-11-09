@@ -68,22 +68,22 @@ class Rover
     rotate_to_target(rotation_speed, target)
   end
 
-  def rotate_to_target(speed, target)
-    left(speed)
-    while (target - @yaw).abs > 5
-      fetch_sensor_data
-      sleep(0.01)
-    end
-  end
-
   def find_new_target(speed, target)
     coord = {}
     right(speed)
-    while (@yaw - target).abs > 5
+    while (target - @yaw).abs > 5
       fetch_sensor_data
       coord[@distance] = @yaw
       sleep(0.01)
     end
     coord[coord.keys.max] || 0
+  end
+
+  def rotate_to_target(speed, target)
+    left(speed)
+    while (@yaw - target).abs > 5
+      fetch_sensor_data
+      sleep(0.01)
+    end
   end
 end
