@@ -70,7 +70,7 @@ class Rover
 
   def rotate_to_target(speed, target)
     left(speed)
-    while (@yaw - target).abs > 5
+    while (target - @yaw).abs > 5
       fetch_sensor_data
       sleep(0.01)
     end
