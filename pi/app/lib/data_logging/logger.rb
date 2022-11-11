@@ -15,8 +15,8 @@ module DataLogging
       write(data: "#{yaw},#{distance}")
     end
 
-    def log_move
-      write(data: 'M')
+    def log_orient_start
+      write(data: 'O')
     end
 
     private

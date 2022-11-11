@@ -37,7 +37,6 @@ class Rover
   end
 
   def forward(speed)
-    @logger.log_move
     drive_command(command: 'H', value: @yaw.to_i)
     drive_command(command: 'F', value: speed.to_i)
   end
@@ -63,6 +62,7 @@ class Rover
   end
 
   def orient
+    @logger.log_orient_start
     rotation_speed = 60
     target = @yaw + 180
     target -= 360 if target > 360
@@ -86,6 +86,7 @@ class Rover
     left(speed)
     while (@yaw - target).abs > 5
       fetch_sensor_data
+      @logger.log_coords(@yaw, @distance)
       sleep(0.01)
     end
   end
