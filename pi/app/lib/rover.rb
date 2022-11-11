@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 
 class Rover
-  attr_reader(:server, :yaw, :distance)
+  attr_reader(:server, :yaw, :distance, :logger)
 
   def initialize(port_name: '/dev/ttyACM0', logging: true)
     @yaw = 0.0
     @distance = 0.0
     @server = Serial::Server.new(port_name: port_name, logging: logging)
     @server.start
+    @logger = DataLogging::Logger.new
   end
 
   def run
@@ -36,6 +37,7 @@ class Rover
   end
 
   def forward(speed)
+    @logger.log_move
     drive_command(command: 'H', value: @yaw.to_i)
     drive_command(command: 'F', value: speed.to_i)
   end
@@ -73,6 +75,7 @@ class Rover
     right(speed)
     while (target - @yaw).abs > 5
       fetch_sensor_data
+      @logger.log_coords(@yaw, @distance)
       coord[@distance] = @yaw
       sleep(0.01)
     end
